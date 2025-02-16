@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login - Automated Life Suit With Navigators</title>
+	<link rel="icon" type="image/jpg" href="assets/images/favicon.jpg">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		.login-container {
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 2rem;
+			background: linear-gradient(45deg, rgba(0,123,255,0.1), rgba(249,199,79,0.1));
+		}
+		
+		.login-form {
+			width: 100%;
+			max-width: 400px;
+			padding: 2rem;
+			animation: fadeIn 0.5s ease;
+		}
+		
+		.login-title {
+			text-align: center;
+			margin-bottom: 2rem;
+			color: var(--primary);
+		}
+		
+		.remember-me {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			margin: 1rem 0;
+			color: var(--text);
+		}
+		
+		.error-message {
+			color: var(--secondary);
+			text-align: center;
+			margin-top: 1rem;
+			padding: 0.5rem;
+			border-radius: 5px;
+			background: rgba(255,107,107,0.1);
+			display: none;
+		}
+
+		.back-btn {
+			position: absolute;
+			top: 1rem;
+			left: 1rem;
+			color: var(--text);
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 0.5rem 1rem;
+			border-radius: 5px;
+			background: var(--glass-bg);
+			transition: all 0.3s ease;
+		}
+
+		.back-btn:hover {
+			background: var(--primary);
+		}
+
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(-20px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		@keyframes shake {
+			0%, 100% { transform: translateX(0); }
+			25% { transform: translateX(-10px); }
+			75% { transform: translateX(10px); }
+		}
+
+		.shake {
+			animation: shake 0.5s ease-in-out;
+		}
+
+		.password-toggle {
+			position: absolute;
+			right: 1rem;
+			top: 35%;
+			transform: translateY(-50%);
+			cursor: pointer;
+			color: var(--text);
+			opacity: 0.7;
+			transition: opacity 0.3s ease;
+		}
+
+		.password-toggle:hover {
+			opacity: 1;
+		}
+
+		.form-group {
+			position: relative;
+			margin-bottom: 1.5rem;
+		}
+
+		.form-group input {
+			width: 100%;
+			padding: 0.8rem;
+			background: rgba(255, 255, 255, 0.1);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 5px;
+			color: var(--text);
+			font-size: 1rem;
+			transition: all 0.3s ease;
+		}
+
+		.form-group input:focus {
+			outline: none;
+			border-color: var(--primary);
+			background: rgba(255, 255, 255, 0.15);
+		}
+
+		.form-group input::placeholder {
+			color: rgba(255, 255, 255, 0.7);
+		}
+	</style>
+</head>
+<body>
+	<a href="index.html" class="back-btn">
+		<i class="fas fa-arrow-left"></i> Back to Home
+	</a>
+	<div class="login-container">
+		<form class="login-form glass" id="loginForm">
+			<h2 class="login-title">Login to Prototype</h2>
+			<div class="form-group">
+				<input type="email" id="email" placeholder="Email" required>
+			</div>
+			<div class="form-group">
+				<input type="password" id="password" placeholder="Password" required>
+				<i class="fas fa-eye-slash password-toggle" onclick="togglePassword()"></i>
+			</div>
+			<div class="remember-me">
+				<input type="checkbox" id="rememberMe">
+				<label for="rememberMe">Remember me</label>
+			</div>
+			<button type="submit" class="submit-btn">Login</button>
+			<div class="error-message" id="errorMessage">Invalid email or password</div>
+		</form>
+	</div>
+
+	<script>
+		// Predefined users with better security
+		const users = [
+			{ email: 'narpavinivedhitha@gmail.com', password: 'Nivi2803$' },
+			{ email: 'sowmyasaravanan2004@gmail.com', password: 'Sowmya@2004' },
+			{ email: 'reshureshmi28@gmail.com', password: 'reshmi@2003' }
+		];
+
+		// Check if user is already logged in
+		if (localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true') {
+			window.location.href = 'prototype.html';
+		}
+
+		const loginForm = document.getElementById('loginForm');
+		const errorMessage = document.getElementById('errorMessage');
+
+		loginForm.addEventListener('submit', (e) => {
+			e.preventDefault();
+			
+			const email = document.getElementById('email').value.trim();
+			const password = document.getElementById('password').value;
+			const rememberMe = document.getElementById('rememberMe').checked;
+
+			const user = users.find(u => u.email === email && u.password === password);
+
+			if (user) {
+				if (rememberMe) {
+					localStorage.setItem('isLoggedIn', 'true');
+					localStorage.setItem('userEmail', email);
+				} else {
+					sessionStorage.setItem('isLoggedIn', 'true');
+					sessionStorage.setItem('userEmail', email);
+				}
+				window.location.href = 'prototype.html';
+			} else {
+				errorMessage.style.display = 'block';
+				loginForm.classList.add('shake');
+				setTimeout(() => {
+					loginForm.classList.remove('shake');
+				}, 500);
+			}
+		});
+
+		function togglePassword() {
+			const passwordInput = document.getElementById('password');
+			const toggleIcon = document.querySelector('.password-toggle');
+			
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				toggleIcon.classList.remove('fa-eye-slash');
+				toggleIcon.classList.add('fa-eye');
+			} else {
+				passwordInput.type = 'password';
+				toggleIcon.classList.remove('fa-eye');
+				toggleIcon.classList.add('fa-eye-slash');
+			}
+		}
+	</script>
+</body>
+</html>

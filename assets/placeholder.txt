@@ -1,0 +1,8 @@
+This directory contains images and other assets for the Automated Life Suit project:
+
+- team1.jpg: Team member photo
+- team2.jpg: Team member photo
+- team3.jpg: Team member photo
+- gallery1.jpg: Project showcase image
+- gallery2.jpg: Project showcase image
+- gallery3.jpg: Project showcase image

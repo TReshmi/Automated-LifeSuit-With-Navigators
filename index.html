@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Automated Life Suit With Navigators</title>
+	<link rel="icon" type="image/jpg" href="assets/images/favicon.jpg">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+	<script src="script.js" defer></script>
+	<style>
+		/* Global link and button styles */
+		a, 
+		button,
+		.nav-link,
+		.nav-brand,
+		.cta-button,
+		.social-links a,
+		.prototype-btn {
+			text-decoration: none !important;
+		}
+
+		/* Social media icons specific */
+		.social-links a {
+			text-decoration: none !important;
+		}
+
+		/* Navigation links */
+		.nav-links a {
+			text-decoration: none !important;
+		}
+
+		/* Ensure Font Awesome icons have no decoration */
+		.fas,
+		.fab,
+		.fa {
+			text-decoration: none !important;
+		}
+
+		/* Hero Section */
+		.hero {
+			position: relative;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			padding: 2rem 1rem;
+			overflow: hidden;
+			background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+						url('assets/images/Model.png') center/60% no-repeat;
+			background-position: center;
+			background-color: var(--bg-color);
+		}
+
+		.hero-content {
+			position: relative;
+			z-index: 2;
+			color: white;
+			max-width: 800px;
+			padding: 2.5rem;
+			
+			border-radius: 15px;
+			
+			margin: 0 auto;
+		}
+
+		@media (max-width: 768px) {
+			.hero {
+				background-size: 75% auto;
+				padding: 4rem 1rem;
+			}
+
+			.hero h1 {
+				font-size: 2.5rem;
+			}
+
+			.hero p {
+				font-size: 1.2rem;
+			}
+		}
+
+		.hero h1 {
+			font-size: 3.5rem;
+			margin-bottom: 1rem;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+			color: var(--primary);
+		}
+
+		.hero p {
+			font-size: 1.5rem;
+			margin-bottom: 2rem;
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+		}
+
+		.cta-button {
+			display: inline-block;
+			padding: 1rem 2rem;
+			background: var(--primary);
+			color: white;
+			text-decoration: none;
+			border-radius: 30px;
+			font-size: 1.2rem;
+			transition: all 0.3s ease;
+			border: 2px solid transparent;
+		}
+
+		.cta-button:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+			background: transparent;
+			border-color: var(--primary);
+		}
+
+
+		/* Scroll to Top Button */
+		.scroll-to-top {
+			display: none;
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			background: var(--primary, #007bff);
+			color: white;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			border: none;
+			cursor: pointer;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2rem;
+			transition: all 0.3s ease;
+			z-index: 999;
+			opacity: 0.8;
+		}
+
+		.scroll-to-top:hover {
+			opacity: 1;
+			transform: translateY(-3px);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+
+		.scroll-to-top.active {
+			display: flex;
+		}
+
+		.form-result {
+			margin-top: 0.7rem;
+			padding: 0.4rem;
+			border-radius: 4px;
+			display: none;
+			text-align: center;
+		}
+
+		.form-result.success {
+			display: block;
+			background-color: #d4edda;
+			color: #155724;
+			border: 1px solid #c3e6cb;
+		}
+
+		.form-result.error {
+			display: block;
+			background-color: #f8d7da;
+			color: #721c24;
+			border: 1px solid #f5c6cb;
+		}
+
+		.form-note {
+			display: block;
+			margin-bottom: 1rem;
+			color: #666;
+			font-size: 0.9rem;
+		}
+
+		.form-group input:invalid,
+		.form-group textarea:invalid {
+			border-color: var(--primary);
+		}
+
+		.form-group input:focus:invalid,
+		.form-group textarea:focus:invalid {
+			box-shadow: 0 0 0 0.2rem rgba(0, 72, 255, 0.25);
+		}
+
+		.form-group input:valid,
+		.form-group textarea:valid {
+			border-color: #28a745;
+		}
+
+		.form-group input:focus:valid,
+		.form-group textarea:focus:valid {
+			box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+		}
+
+		/* Updated form styles */
+		.form-group {
+			position: relative;
+			margin-bottom: 0.7rem;
+		}
+
+		.form-group input,
+		.form-group textarea {
+			width: 100%;
+			padding: 0.6rem;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+		}
+
+		.form-group input::placeholder,
+		.form-group textarea::placeholder {
+			color: #666;
+			transition: all 0.3s ease;
+		}
+
+		.form-group input:focus::placeholder,
+		.form-group textarea:focus::placeholder {
+			opacity: 0;
+		}
+
+		.form-group textarea {
+			min-height: 80px;
+			resize: vertical;
+		}
+
+		.form-group input:focus,
+		.form-group textarea:focus {
+			outline: none;
+			border-color: var(--primary);
+			box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+		}
+	</style>
+</head>
+<body>
+	<!-- Navigation -->
+	<nav class="navbar">
+		<div class="nav-container">
+			<div class="nav-brand">
+				<img src="assets/images/Team-Logo.jpg" alt="Team Logo" class="nav-logo">
+				ALSN
+			</div>
+			<div class="nav-links">
+				<a href="#home" class="nav-link active">Home</a>
+				<a href="#about" class="nav-link">About</a>
+				<a href="#team" class="nav-link">Team</a>
+				<a href="#contact" class="nav-link">Contact</a>
+				<a href="login.html" class="prototype-btn">Prototype</a>
+			</div>
+			<button class="menu-btn">
+				<i class="fas fa-bars"></i>
+			</button>
+		</div>
+	</nav>
+
+	<!-- Hero Section -->
+	<section id="home" class="hero">
+		<div class="hero-content">
+			<h1>Automated Life Suit with Navigators</h1>
+			<p>Lost in Water? Not Anymore!</p>
+			<a href="login.html" class="cta-button">View Prototype</a>
+		</div>
+		<div class="hero-animation"></div>
+	</section>
+
+	<div class="section-divider"></div>
+
+	<!-- About Section -->
+	<section id="about" class="about">
+		<h2>About Our Project</h2>
+		<div class="about-content">
+			<div class="about-text">
+				<p><b style="color: var(--primary);">Automated Life Suit with Navigators</b><b> is an innovative life-saving solution designed to assist people in flood-prone areas by automatically transporting them from disaster sites to the nearest shore. Our system integrates cutting-edge technology, including a DC motor, LED indicators, a lead acid battery, an Arduino board, a GSM module, and Bluetooth modules,</b> ensuring efficient navigation and communication during emergencies.</p><br>
+				<p>Developed by <b style="color: var(--primary);">Team Hustlers</b>, this project aims to revolutionize disaster response and provide a safer, more reliable way to save lives during floods. By leveraging automation and real-time tracking, our life suit enhances survival chances, reducing the risks faced by individuals stranded in rising waters.</p><br>
+				<p>We are dedicated to refining this system further and are seeking support to bring this vision to life. Join us in making a difference!</p>
+			</div>
+			<div class="about-features">
+				<div class="feature">
+					<i class="fas fa-cogs"></i>
+					<h3>Motorized Propulsion</h3>
+					<p>DC motors and a propeller system enable effortless movement, reducing physical strain in emergencies.</p>
+				</div>
+				<div class="feature">
+					<i class="fas fa-satellite"></i>
+					<h3>Real-Time GPS Tracking</h3>
+					<p>Integrated GPS provides precise location tracking for quick and efficient rescue.</p>
+				</div>
+				<div class="feature">
+					<i class="fas fa-heartbeat"></i>
+					<h3>Advanced Health Monitoring</h3>
+					<p>Tracks heart rate and oxygen levels to ensure timely medical attention.</p>
+				</div>
+				<div class="feature">
+					<i class="fas fa-shield-alt"></i>
+					<h3>Self-Sustaining Suit</h3>
+					<p>Designed for independent operation, ensuring functionality without external assistance during emergencies.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="section-divider"></div>
+
+	<!-- Team Section -->
+	<section id="team" class="team">
+		<h2>Our Team</h2>
+		<div class="team-grid">
+			<div class="team-member glass">
+				<div class="member-img">
+					<img src="assets\images\Nivedhitha M.jpg" alt="Nivedhitha M">
+				</div>
+				<h3>Nivedhitha M</h3>
+				<div class="social-links">
+					<a href="https://www.linkedin.com/in/nivedhitha-muthukumaran?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+					<a href="https://www.instagram.com/nivii2810?igsh=YjNxajJ4cTE1aGNy" title="Instagram"><i class="fab fa-instagram"></i></a>
+					<a href="mailto:narpavinivedhitha@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+				</div>
+			</div>
+			<div class="team-member glass">
+				<div class="member-img">
+					<img src="assets\images\Reshmi T.jpg" alt="T Reshmi">
+				</div>
+				<h3>T Reshmi</h3>
+				<div class="social-links">
+					<a href="https://www.linkedin.com/in/reshmi-t-32a561208?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+					<a href="https://www.instagram.com/reshmi_thulasiraman?igsh=MWMwOW45NTdqZHA3" title="Instagram"><i class="fab fa-instagram"></i></a>
+					<a href="mailto:reshureshmi28@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+				</div>
+			</div>
+			<div class="team-member glass">
+				<div class="member-img">
+					<img src="assets\images\Sowmya.jpg" alt="S Sowmya">
+				</div>
+				<h3>S Sowmya</h3>
+				<div class="social-links">
+					<a href="https://www.linkedin.com/in/s-sowmya-12ba05228?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+					<a href="https://www.instagram.com/sowmya_saravanan01?igsh=MWxiZHM2d2cxd3J1eQ==" title="Instagram"><i class="fab fa-instagram"></i></a>
+					<a href="mailto:sowmyasaravanan2004@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="section-divider"></div>
+
+	<!-- Contact Section -->
+	<section id="contact" class="contact">
+		<h2>Contact Us</h2>
+		<div class="contact-container">
+			<form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+				<!-- Encrypted access key -->
+				<input type="hidden" name="access_key" value="4b9ae1e6-5be7-4d08-8e9f-c3f78c56c873">
+				<input type="hidden" name="subject" value="Message Alert from ALSN">
+				<div class="form-group">
+					<input type="text" id="name" name="name" required pattern="[A-Za-z ]{3,50}" title="Please enter a valid name (3-50 characters, letters only)" placeholder="Name *">
+				</div>
+				<div class="form-group">
+					<input type="email" id="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address" placeholder="Email *">
+				</div>
+				<div class="form-group">
+					<textarea id="message" name="message" required minlength="4" title="Please enter at least 4 characters" placeholder="Message *"></textarea>
+				</div>
+				<button type="submit" class="submit-btn">Send Message</button>
+				<div id="result" class="form-result"></div>
+			</form>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer>
+		<p>&copy; 2025 Automated Life Suit. All rights reserved.</p>
+	</footer>
+
+	<!-- Scroll to Top Button -->
+	<button class="scroll-to-top" id="scrollToTop">
+		<i class="fas fa-arrow-up"></i>
+	</button>
+
+	<script>
+		// Scroll to Top Functionality
+		const scrollToTopBtn = document.getElementById('scrollToTop');
+
+		window.addEventListener('scroll', () => {
+			if (window.pageYOffset > 300) {
+				scrollToTopBtn.classList.add('active');
+			} else {
+				scrollToTopBtn.classList.remove('active');
+			}
+		});
+
+		scrollToTopBtn.addEventListener('click', () => {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
+		});
+
+		// Contact Form Handling
+		const form = document.getElementById('contact-form');
+		const result = document.getElementById('result');
+
+		function isValidEmail(email) {
+			// This regex checks for:
+			// - At least one character before @
+			// - @ symbol
+			// - At least one character between @ and .
+			// - . followed by at least two characters
+			// - Only allows letters, numbers, dots, hyphens, and underscores
+			const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+			return emailRegex.test(email);
+		}
+
+		form.addEventListener('submit', function(e) {
+			e.preventDefault();
+			
+			// Additional validation
+			const email = document.getElementById('email');
+			
+			// Enhanced email validation
+			if (!isValidEmail(email.value)) {
+				result.innerHTML = "Please enter a valid email address";
+				result.style.display = "block";
+				result.classList.add('error');
+				return;
+			}
+
+			const formData = new FormData(form);
+			const object = Object.fromEntries(formData);
+			const json = JSON.stringify(object);
+
+			result.innerHTML = "Please wait...";
+			result.style.display = "block";
+			result.classList.remove('success', 'error');
+
+			fetch('https://api.web3forms.com/submit', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				},
+				body: json
+			})
+			.then(async (response) => {
+				let json = await response.json();
+				if (response.status == 200) {
+					result.innerHTML = "Message sent successfully!";
+					result.classList.add('success');
+					form.reset();
+				} else {
+					result.innerHTML = json.message;
+					result.classList.add('error');
+				}
+			})
+			.catch(error => {
+				result.innerHTML = "Something went wrong!";
+				result.classList.add('error');
+			})
+			.finally(() => {
+				setTimeout(() => {
+					result.style.display = "none";
+					result.classList.remove('success', 'error');
+				}, 3000);
+			});
+		});
+	</script>
+</body>
+</html>
